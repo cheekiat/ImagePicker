@@ -6,6 +6,10 @@ import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.support.v4.content.FileProvider;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -38,13 +42,12 @@ public class ImagePreActivity extends BaseActivity {
     private List<MediaFile> mMediaFileList;
     private int mPosition = 0;
 
-    private TextView mTvTitle;
-    private TextView mTvCommit;
     private ImageView mIvPlay;
     private HackyViewPager mViewPager;
     private LinearLayout mLlPreSelect;
-    private ImageView mIvPreCheck;
     private ImagePreViewAdapter mImagePreViewAdapter;
+    MenuItem menuItem;
+    TextView mCount;
 
 
     @Override
@@ -54,23 +57,20 @@ public class ImagePreActivity extends BaseActivity {
 
     @Override
     protected void initView() {
-        mTvTitle = findViewById(R.id.tv_actionBar_title);
-        mTvCommit = findViewById(R.id.tv_actionBar_commit);
+
+        setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+
         mIvPlay = findViewById(R.id.iv_main_play);
         mViewPager = findViewById(R.id.vp_main_preImage);
         mLlPreSelect = findViewById(R.id.ll_pre_select);
-        mIvPreCheck = findViewById(R.id.iv_item_check);
+        mCount = findViewById(R.id.count);
+
     }
 
     @Override
     protected void initListener() {
-
-        findViewById(R.id.iv_actionBar_back).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
 
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -80,7 +80,8 @@ public class ImagePreActivity extends BaseActivity {
 
             @Override
             public void onPageSelected(int position) {
-                mTvTitle.setText(String.format("%d/%d", position + 1, mMediaFileList.size()));
+
+                getSupportActionBar().setTitle(String.format("%d/%d", position + 1, mMediaFileList.size()));
                 setIvPlayShow(mMediaFileList.get(position));
                 updateSelectButton(mMediaFileList.get(position).getPath());
             }
@@ -118,14 +119,6 @@ public class ImagePreActivity extends BaseActivity {
             }
         });
 
-        mTvCommit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setResult(RESULT_OK, new Intent());
-                finish();
-            }
-        });
-
         mIvPlay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -148,17 +141,49 @@ public class ImagePreActivity extends BaseActivity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_gallery, menu);
+
+        menuItem = menu.findItem(R.id.apply);
+
+        updateCommitButton();
+
+        getSupportActionBar().setTitle(String.format("%d/%d", mPosition + 1, mMediaFileList.size()));
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+
+
+        if (item.getItemId() == R.id.apply) {
+
+            setResult(RESULT_OK, new Intent());
+            finish();
+
+            return true;
+        } else if (item.getItemId() == android.R.id.home) {
+
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     protected void getData() {
         mMediaFileList = DataUtil.getInstance().getMediaData();
         mPosition = getIntent().getIntExtra(IMAGE_POSITION, 0);
-        mTvTitle.setText(String.format("%d/%d", mPosition + 1, mMediaFileList.size()));
+
         mImagePreViewAdapter = new ImagePreViewAdapter(this, mMediaFileList);
         mViewPager.setAdapter(mImagePreViewAdapter);
         mViewPager.setCurrentItem(mPosition);
         //更新当前页面状态
         setIvPlayShow(mMediaFileList.get(mPosition));
         updateSelectButton(mMediaFileList.get(mPosition).getPath());
-        updateCommitButton();
     }
 
     /**
@@ -171,18 +196,15 @@ public class ImagePreActivity extends BaseActivity {
         //改变确定按钮UI
         int selectCount = SelectionManager.getInstance().getSelectPaths().size();
         if (selectCount == 0) {
-            mTvCommit.setEnabled(false);
-            mTvCommit.setText(getString(R.string.confirm));
+            menuItem.setTitle(getString(R.string.confirm));
             return;
         }
         if (selectCount < maxCount) {
-            mTvCommit.setEnabled(true);
-            mTvCommit.setText(String.format(getString(R.string.confirm_msg), selectCount, maxCount));
+            menuItem.setTitle(String.format(getString(R.string.confirm_msg), selectCount, maxCount));
             return;
         }
         if (selectCount == maxCount) {
-            mTvCommit.setEnabled(true);
-            mTvCommit.setText(String.format(getString(R.string.confirm_msg), selectCount, maxCount));
+            menuItem.setTitle(String.format(getString(R.string.confirm_msg), selectCount, maxCount));
             return;
         }
     }
@@ -192,11 +214,8 @@ public class ImagePreActivity extends BaseActivity {
      */
     private void updateSelectButton(String imagePath) {
         boolean isSelect = SelectionManager.getInstance().isImageSelect(imagePath);
-        if (isSelect) {
-            mIvPreCheck.setImageDrawable(getResources().getDrawable(R.mipmap.icon_image_checked));
-        } else {
-            mIvPreCheck.setImageDrawable(getResources().getDrawable(R.mipmap.icon_image_check));
-        }
+
+        mCount.setText(SelectionManager.getInstance().getSelectCountIndex(imagePath));
     }
 
     /**

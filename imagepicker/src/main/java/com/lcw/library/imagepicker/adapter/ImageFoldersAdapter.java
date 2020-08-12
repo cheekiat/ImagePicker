@@ -15,6 +15,7 @@ import com.lcw.library.imagepicker.R;
 import com.lcw.library.imagepicker.data.MediaFolder;
 import com.lcw.library.imagepicker.manager.ConfigManager;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -48,7 +49,7 @@ public class ImageFoldersAdapter extends RecyclerView.Adapter<ImageFoldersAdapte
 
         final MediaFolder mediaFolder = mMediaFolderList.get(position);
         String folderCover = mediaFolder.getFolderCover();
-        String folderName = mediaFolder.getFolderName();
+        final String folderName = mediaFolder.getFolderName();
         int imageSize = mediaFolder.getMediaFileList().size();
 
         if (!TextUtils.isEmpty(folderName)) {
@@ -62,6 +63,8 @@ public class ImageFoldersAdapter extends RecyclerView.Adapter<ImageFoldersAdapte
         } else {
             holder.mImageFolderCheck.setVisibility(View.GONE);
         }
+
+
         //加载图片
         try {
             ConfigManager.getInstance().getImageLoader().loadImage(holder.mImageCover, folderCover);
@@ -73,9 +76,11 @@ public class ImageFoldersAdapter extends RecyclerView.Adapter<ImageFoldersAdapte
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+
                     mCurrentImageFolderIndex = position;
                     notifyDataSetChanged();
                     mImageFolderChangeListener.onImageFolderChange(view, position);
+
                 }
             });
         }

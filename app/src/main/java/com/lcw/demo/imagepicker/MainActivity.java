@@ -31,11 +31,28 @@ public class MainActivity extends AppCompatActivity {
                         .showImage(true)//设置是否展示图片
                         .showVideo(true)//设置是否展示视频
                         .filterGif(false)//设置是否过滤gif图片
-                        .setMaxCount(9)//设置最大选择图片数目(默认为1，单选)
+                        .setMaxCount(5)//设置最大选择图片数目(默认为1，单选)
                         .setSingleType(true)//设置图片视频不能同时选择
                         .setImagePaths(mImagePaths)//设置历史选择记录
                         .setImageLoader(new GlideLoader())//设置自定义图片加载器
                         .start(MainActivity.this, REQUEST_SELECT_IMAGES_CODE);//REQEST_SELECT_IMAGES_CODE为Intent调用的requestCode
+            }
+        });
+
+        findViewById(R.id.camera).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ImagePicker.getInstance()
+                        .setTitle("标题")//设置标题
+                        .showCamera(true)//设置是否显示拍照按钮
+                        .showImage(true)//设置是否展示图片
+                        .showVideo(true)//设置是否展示视频
+                        .filterGif(false)//设置是否过滤gif图片
+                        .setMaxCount(9)//设置最大选择图片数目(默认为1，单选)
+                        .setSingleType(true)//设置图片视频不能同时选择
+                        .setImagePaths(mImagePaths)//设置历史选择记录
+                        .setImageLoader(new GlideLoader())//设置自定义图片加载器
+                        .startCamera(MainActivity.this, REQUEST_SELECT_IMAGES_CODE);//REQEST_SELECT_IMAGES_CODE为Intent调用的requestCode
             }
         });
 

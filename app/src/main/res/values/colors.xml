@@ -3,4 +3,6 @@
     <color name="colorPrimary">#303030</color>
     <color name="colorPrimaryDark">#303030</color>
     <color name="colorAccent">#303030</color>
+
+    <color name="picker_text_color">#ff000000</color>
 </resources>

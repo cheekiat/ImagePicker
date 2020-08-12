@@ -153,4 +153,10 @@ public class ImagePicker {
         activity.startActivityForResult(intent, requestCode);
     }
 
+    public void startCamera(Activity activity, int requestCode) {
+        Intent intent = new Intent(activity, ImagePickerActivity.class);
+        intent.putExtra(Keys.IS_OPEN_CAMERA,true);
+        activity.startActivityForResult(intent, requestCode);
+    }
+
 }

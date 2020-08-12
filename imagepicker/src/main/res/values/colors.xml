@@ -11,4 +11,6 @@
     <color name="text_bg_gray">#99000000</color>
 
     <color name="bg_black">#000000</color>
+
+    <color name="picker_text_color">#000000</color>
 </resources>

@@ -3,6 +3,7 @@ package com.lcw.library.imagepicker.manager;
 import com.lcw.library.imagepicker.utils.MediaFileUtil;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 /**
@@ -19,6 +20,8 @@ public class SelectionManager {
     private ArrayList<String> mSelectImagePaths = new ArrayList<>();
 
     private int mMaxCount = 1;
+
+    private LinkedHashMap<String, String> hashMap = new LinkedHashMap<>();
 
     private SelectionManager() {
     }
@@ -58,8 +61,26 @@ public class SelectionManager {
      * @return
      */
     public ArrayList<String> getSelectPaths() {
-        return mSelectImagePaths;
+
+        return new ArrayList<String>(hashMap.keySet());
+//        return mSelectImagePaths;
     }
+
+    public String getSelectCount(String imagePath) {
+        return hashMap.get(imagePath);
+    }
+
+    public String getSelectCountIndex(String imagePath) {
+
+        int pos = new ArrayList<String>(hashMap.keySet()).indexOf(imagePath);
+
+        if(pos == -1){
+            return "";
+        }
+        return String.valueOf((pos+1));
+    }
+
+
 
     /**
      * 添加/移除图片到选择集合
@@ -69,9 +90,12 @@ public class SelectionManager {
      */
     public boolean addImageToSelectList(String imagePath) {
         if (mSelectImagePaths.contains(imagePath)) {
+
+            hashMap.remove(imagePath);
             return mSelectImagePaths.remove(imagePath);
         } else {
             if (mSelectImagePaths.size() < mMaxCount) {
+                hashMap.put(imagePath,imagePath);
                 return mSelectImagePaths.add(imagePath);
             } else {
                 return false;
@@ -89,6 +113,7 @@ public class SelectionManager {
             for (int i = 0; i < imagePaths.size(); i++) {
                 String imagePath = imagePaths.get(i);
                 if (!mSelectImagePaths.contains(imagePath) && mSelectImagePaths.size() < mMaxCount) {
+                    hashMap.put(imagePath,imagePath);
                     mSelectImagePaths.add(imagePath);
                 }
             }
@@ -140,6 +165,8 @@ public class SelectionManager {
      * 清除已选图片
      */
     public void removeAll() {
+
+        hashMap.clear();
         mSelectImagePaths.clear();
     }
 

@@ -15,7 +15,11 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.PopupWindow;
@@ -24,6 +28,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lcw.library.imagepicker.ImagePicker;
+import com.lcw.library.imagepicker.Keys;
 import com.lcw.library.imagepicker.R;
 import com.lcw.library.imagepicker.adapter.ImageFoldersAdapter;
 import com.lcw.library.imagepicker.adapter.ImagePickerAdapter;
@@ -70,8 +75,6 @@ public class ImagePickerActivity extends BaseActivity implements ImagePickerAdap
     /**
      * 界面UI
      */
-    private TextView mTvTitle;
-    private TextView mTvCommit;
     private TextView mTvImageTime;
     private RecyclerView mRecyclerView;
     private TextView mTvImageFolders;
@@ -101,6 +104,7 @@ public class ImagePickerActivity extends BaseActivity implements ImagePickerAdap
             hideImageTime();
         }
     };
+    MenuItem menuItem;
 
 
     /**
@@ -145,6 +149,12 @@ public class ImagePickerActivity extends BaseActivity implements ImagePickerAdap
         if (mImagePaths != null && !mImagePaths.isEmpty()) {
             SelectionManager.getInstance().addImagePathsToSelectList(mImagePaths);
         }
+
+        boolean isOpenCamera = getIntent().getBooleanExtra(Keys.IS_OPEN_CAMERA,false);
+
+        if(isOpenCamera){
+            showCamera();
+        }
     }
 
 
@@ -155,15 +165,6 @@ public class ImagePickerActivity extends BaseActivity implements ImagePickerAdap
     protected void initView() {
 
         mProgressDialog = ProgressDialog.show(this, null, getString(R.string.scanner_image));
-
-        //顶部栏相关
-        mTvTitle = findViewById(R.id.tv_actionBar_title);
-        if (TextUtils.isEmpty(mTitle)) {
-            mTvTitle.setText(getString(R.string.image_picker));
-        } else {
-            mTvTitle.setText(mTitle);
-        }
-        mTvCommit = findViewById(R.id.tv_actionBar_commit);
 
         //滑动悬浮标题相关
         mTvImageTime = findViewById(R.id.tv_image_time);
@@ -185,7 +186,46 @@ public class ImagePickerActivity extends BaseActivity implements ImagePickerAdap
         mImagePickerAdapter.setOnItemClickListener(this);
         mRecyclerView.setAdapter(mImagePickerAdapter);
 
+        setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+
+        if(mTitle != null && !mTitle.isEmpty()){
+            getSupportActionBar().setTitle(mTitle);
+        }else {
+            getSupportActionBar().setTitle("");
+        }
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_gallery, menu);
+
+        menuItem = menu.findItem(R.id.apply);
+
+        updateCommitButton();
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        if (item.getItemId() == R.id.apply) {
+
+            commitSelection();
+
+            return true;
+        } else if (item.getItemId() == android.R.id.home) {
+
+            setResult(RESULT_CANCELED);
+            finish();
+
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     /**
@@ -193,21 +233,6 @@ public class ImagePickerActivity extends BaseActivity implements ImagePickerAdap
      */
     @Override
     protected void initListener() {
-
-        findViewById(R.id.iv_actionBar_back).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setResult(RESULT_CANCELED);
-                finish();
-            }
-        });
-
-        mTvCommit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                commitSelection();
-            }
-        });
 
         mTvImageFolders.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -247,6 +272,7 @@ public class ImagePickerActivity extends BaseActivity implements ImagePickerAdap
         } else {
             startScannerTask();
         }
+
     }
 
     /**
@@ -334,8 +360,8 @@ public class ImagePickerActivity extends BaseActivity implements ImagePickerAdap
                                 setLightMode(LIGHT_ON);
                             }
                         });
-                        updateCommitButton();
                     }
+                    updateCommitButton();
                     mProgressDialog.cancel();
                 }
             });
@@ -469,7 +495,7 @@ public class ImagePickerActivity extends BaseActivity implements ImagePickerAdap
             }
             boolean addSuccess = SelectionManager.getInstance().addImageToSelectList(imagePath);
             if (addSuccess) {
-                mImagePickerAdapter.notifyItemChanged(position);
+                mImagePickerAdapter.notifyDataSetChanged();
             } else {
                 Toast.makeText(this, String.format(getString(R.string.select_image_max), mMaxCount), Toast.LENGTH_SHORT).show();
             }
@@ -484,18 +510,21 @@ public class ImagePickerActivity extends BaseActivity implements ImagePickerAdap
         //改变确定按钮UI
         int selectCount = SelectionManager.getInstance().getSelectPaths().size();
         if (selectCount == 0) {
-            mTvCommit.setEnabled(false);
-            mTvCommit.setText(getString(R.string.confirm));
+            if (menuItem != null) {
+                menuItem.setTitle(getString(R.string.confirm));
+            }
             return;
         }
         if (selectCount < mMaxCount) {
-            mTvCommit.setEnabled(true);
-            mTvCommit.setText(String.format(getString(R.string.confirm_msg), selectCount, mMaxCount));
+            if (menuItem != null) {
+                menuItem.setTitle(String.format(getString(R.string.confirm_msg), selectCount, mMaxCount));
+            }
             return;
         }
         if (selectCount == mMaxCount) {
-            mTvCommit.setEnabled(true);
-            mTvCommit.setText(String.format(getString(R.string.confirm_msg), selectCount, mMaxCount));
+            if (menuItem != null) {
+                menuItem.setTitle(String.format(getString(R.string.confirm_msg), selectCount, mMaxCount));
+            }
             return;
         }
     }

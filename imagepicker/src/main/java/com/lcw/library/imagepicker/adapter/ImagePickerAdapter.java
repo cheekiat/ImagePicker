@@ -20,6 +20,9 @@ import com.lcw.library.imagepicker.utils.Utils;
 import com.lcw.library.imagepicker.view.SquareImageView;
 import com.lcw.library.imagepicker.view.SquareRelativeLayout;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 /**
@@ -107,7 +110,7 @@ public class ImagePickerAdapter extends RecyclerView.Adapter<ImagePickerAdapter.
     @Override
     public void onBindViewHolder(@NonNull BaseHolder holder, final int position) {
         int itemType = getItemViewType(position);
-        MediaFile mediaFile = getMediaFile(position);
+        final MediaFile mediaFile = getMediaFile(position);
         switch (itemType) {
             //图片、视频Item
             case ItemType.ITEM_TYPE_IMAGE:
@@ -119,6 +122,7 @@ public class ImagePickerAdapter extends RecyclerView.Adapter<ImagePickerAdapter.
             default:
                 break;
         }
+
         //设置点击事件监听
         if (mOnItemClickListener != null) {
             holder.mSquareRelativeLayout.setOnClickListener(new View.OnClickListener() {
@@ -129,9 +133,14 @@ public class ImagePickerAdapter extends RecyclerView.Adapter<ImagePickerAdapter.
             });
 
             if (holder instanceof MediaHolder) {
-                ((MediaHolder) holder).mImageCheck.setOnClickListener(new View.OnClickListener() {
+                ((MediaHolder) holder).mCount.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+//                        if (hashMap.get(mediaFile.getDateToken()) != null) {
+//                            hashMap.remove(mediaFile.getDateToken());
+//                        }else {
+//                            hashMap.put(mediaFile.getDateToken(),mediaFile.getDateToken());
+//                        }
                         mOnItemClickListener.onMediaCheck(view, position);
                     }
                 });
@@ -153,10 +162,8 @@ public class ImagePickerAdapter extends RecyclerView.Adapter<ImagePickerAdapter.
             //选择状态（仅是UI表现，真正数据交给SelectionManager管理）
             if (SelectionManager.getInstance().isImageSelect(imagePath)) {
                 mediaHolder.mImageView.setColorFilter(Color.parseColor("#77000000"));
-                mediaHolder.mImageCheck.setImageDrawable(mContext.getResources().getDrawable(R.mipmap.icon_image_checked));
             } else {
                 mediaHolder.mImageView.setColorFilter(null);
-                mediaHolder.mImageCheck.setImageDrawable(mContext.getResources().getDrawable(R.mipmap.icon_image_check));
             }
 
             try {
@@ -173,6 +180,9 @@ public class ImagePickerAdapter extends RecyclerView.Adapter<ImagePickerAdapter.
                 } else {
                     ((ImageHolder) mediaHolder).mImageGif.setVisibility(View.GONE);
                 }
+
+                ((ImageHolder) mediaHolder).mCount.setText(SelectionManager.getInstance().getSelectCountIndex(mediaFile.getPath())+"");
+
             }
 
             if (mediaHolder instanceof VideoHolder) {
@@ -216,12 +226,12 @@ public class ImagePickerAdapter extends RecyclerView.Adapter<ImagePickerAdapter.
     class MediaHolder extends BaseHolder {
 
         SquareImageView mImageView;
-        ImageView mImageCheck;
+        TextView mCount;
 
         MediaHolder(View itemView) {
             super(itemView);
             mImageView = itemView.findViewById(R.id.iv_item_image);
-            mImageCheck = itemView.findViewById(R.id.iv_item_check);
+            mCount = itemView.findViewById(R.id.count);
         }
     }
 

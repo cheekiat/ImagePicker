@@ -13,21 +13,21 @@
     <RelativeLayout
         android:id="@+id/rl_main_bottom"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="?attr/actionBarSize"
         android:layout_alignParentBottom="true"
-        android:background="#303030">
+        android:background="?attr/colorPrimary">
 
         <TextView
             android:id="@+id/tv_main_imageFolders"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_alignParentLeft="true"
             android:layout_marginLeft="10dp"
             android:drawablePadding="4dp"
-            android:drawableRight="@mipmap/icon_album_index"
+            android:layout_centerVertical="true"
             android:gravity="center"
             android:text="@string/all_media"
-            android:textColor="@android:color/white"
+            style="@style/AppTheme"
             android:textSize="16sp"
             tool:text="@string/all_media" />
 
