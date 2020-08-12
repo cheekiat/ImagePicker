@@ -1,5 +1,8 @@
 apply plugin: 'com.android.library'
 apply plugin: 'com.novoda.bintray-release'
+apply plugin: 'com.github.dcendents.android-maven'
+
+group='com.github.cheekiat'
 
 publish {
     userOrg = 'lichenwei'
@@ -15,8 +18,8 @@ android {
     defaultConfig {
         minSdkVersion 16
         targetSdkVersion 27
-        versionCode 228
-        versionName "2.2.8"
+        versionCode 229
+        versionName "2.2.9"
     }
 
     buildTypes {
