@@ -2,8 +2,11 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/ImagePicker.iml" filepath="$PROJECT_DIR$/.idea/modules/ImagePicker.iml" group="ImagePicker" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/ImagePicker-app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/ImagePicker-app.iml" group="ImagePicker/app" />
       <module fileurl="file://$PROJECT_DIR$/ImagePickerDemo.iml" filepath="$PROJECT_DIR$/ImagePickerDemo.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/imagepicker/com.github.cheekiat-imagepicker.iml" filepath="$PROJECT_DIR$/.idea/modules/imagepicker/com.github.cheekiat-imagepicker.iml" group="ImagePicker/imagepicker" />
       <module fileurl="file://$PROJECT_DIR$/imagepicker/imagepicker.iml" filepath="$PROJECT_DIR$/imagepicker/imagepicker.iml" />
     </modules>
   </component>
