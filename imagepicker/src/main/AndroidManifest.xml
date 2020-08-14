@@ -6,7 +6,7 @@
     <uses-permission android:name="android.permission.CAMERA" />
 
     <application>
- 
+
         <!--图片列表Activity-->
         <activity
             android:name="com.lcw.library.imagepicker.activity.ImagePickerActivity"
