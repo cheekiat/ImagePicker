@@ -30,9 +30,9 @@ public class GlideLoader implements ImageLoader {
     @Override
     public void loadImage(ImageView imageView, String imagePath) {
         //小图加载
-//        Glide.with(imageView.getContext()).load(imagePath).apply(mOptions).into(imageView);
+        Glide.with(imageView.getContext()).load(imagePath).apply(mOptions).into(imageView);
 
-        ((SimpleDraweeView)imageView).setImageURI("file://"+imagePath);
+//        ((SimpleDraweeView)imageView).setImageURI("file://"+imagePath);
 
     }
 

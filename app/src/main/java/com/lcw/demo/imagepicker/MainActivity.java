@@ -2,11 +2,14 @@ package com.lcw.demo.imagepicker;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
 import com.lcw.library.imagepicker.ImagePicker;
+import com.lcw.library.imagepicker.listener.OnImageCallBack;
 
 import java.util.ArrayList;
 
@@ -34,7 +37,12 @@ public class MainActivity extends AppCompatActivity {
                         .setMaxCount(5)//设置最大选择图片数目(默认为1，单选)
                         .setSingleType(true)//设置图片视频不能同时选择
                         .setImagePaths(mImagePaths)//设置历史选择记录
+                        .setSpanCount(2)
                         .setImageLoader(new GlideLoader())//设置自定义图片加载器
+                        .setOnImageCallBack((result, totalSize) -> {
+                            Log.wtf(MainActivity.class.getSimpleName(), "result : "+result);
+                            Log.wtf(MainActivity.class.getSimpleName(), "totalSize : "+totalSize);
+                        })
                         .start(MainActivity.this, REQUEST_SELECT_IMAGES_CODE);//REQEST_SELECT_IMAGES_CODE为Intent调用的requestCode
             }
         });
@@ -50,8 +58,13 @@ public class MainActivity extends AppCompatActivity {
                         .filterGif(false)//设置是否过滤gif图片
                         .setMaxCount(9)//设置最大选择图片数目(默认为1，单选)
                         .setSingleType(true)//设置图片视频不能同时选择
+                        .setSpanCount(2)
                         .setImagePaths(mImagePaths)//设置历史选择记录
                         .setImageLoader(new GlideLoader())//设置自定义图片加载器
+                        .setOnImageCallBack((result, totalSize) -> {
+                            Log.wtf(MainActivity.class.getSimpleName(), "result : "+result);
+                            Log.wtf(MainActivity.class.getSimpleName(), "totalSize : "+totalSize);
+                        })
                         .startCamera(MainActivity.this, REQUEST_SELECT_IMAGES_CODE);//REQEST_SELECT_IMAGES_CODE为Intent调用的requestCode
             }
         });

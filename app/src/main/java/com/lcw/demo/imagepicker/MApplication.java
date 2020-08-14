@@ -18,7 +18,7 @@ public class MApplication extends Application {
     public void onCreate() {
         super.onCreate();
         mApplication = this;
-        Fresco.initialize(this);
+//        Fresco.initialize(this);
     }
 
     public static MApplication getContext() {

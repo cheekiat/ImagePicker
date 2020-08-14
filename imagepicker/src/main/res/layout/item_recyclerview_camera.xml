@@ -4,6 +4,9 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:background="@color/bg_color"
+    android:gravity="center"
+    android:layout_gravity="center"
+    android:foreground="?selectableItemBackground"
     android:padding="1dp">
 
     <com.lcw.library.imagepicker.view.SquareImageView
@@ -11,7 +14,6 @@
         android:layout_width="36dp"
         android:layout_height="36dp"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
         android:src="@mipmap/icon_image_camera" />
 
     <TextView

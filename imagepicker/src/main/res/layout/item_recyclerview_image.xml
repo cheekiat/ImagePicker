@@ -3,6 +3,7 @@
     android:id="@+id/srl_item"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:foreground="?selectableItemBackground"
     android:padding="1dp">
 
     <com.lcw.library.imagepicker.view.SquareImageView
@@ -23,8 +24,9 @@
         android:visibility="gone" />
 
     <FrameLayout
+        android:id="@+id/countLayout"
         android:layout_width="wrap_content"
-        android:layout_margin="8dp"
+        android:padding="8dp"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true">
 

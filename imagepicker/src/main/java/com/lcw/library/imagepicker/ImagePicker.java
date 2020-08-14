@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 
 import com.lcw.library.imagepicker.activity.ImagePickerActivity;
+import com.lcw.library.imagepicker.listener.OnImageCallBack;
 import com.lcw.library.imagepicker.manager.ConfigManager;
 import com.lcw.library.imagepicker.utils.ImageLoader;
 
@@ -140,6 +141,28 @@ public class ImagePicker {
      */
     public ImagePicker setImagePaths(ArrayList<String> imagePaths) {
         ConfigManager.getInstance().setImagePaths(imagePaths);
+        return mImagePicker;
+    }
+
+    /**
+     * 设置 SpanCount
+     *
+     * @param spanCount
+     * @return
+     */
+    public ImagePicker setSpanCount(int spanCount) {
+        ConfigManager.getInstance().setSpanCount(spanCount);
+        return mImagePicker;
+    }
+
+    /**
+     * 设置 SpanCount
+     *
+     * @param spanCount
+     * @return
+     */
+    public ImagePicker setOnImageCallBack(OnImageCallBack onImageCallBack) {
+        ConfigManager.getInstance().setOnImageCallBack(onImageCallBack);
         return mImagePicker;
     }
 

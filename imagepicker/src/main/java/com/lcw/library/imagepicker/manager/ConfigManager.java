@@ -1,5 +1,6 @@
 package com.lcw.library.imagepicker.manager;
 
+import com.lcw.library.imagepicker.listener.OnImageCallBack;
 import com.lcw.library.imagepicker.utils.ImageLoader;
 
 import java.util.ArrayList;
@@ -25,6 +26,8 @@ public class ConfigManager {
     private int maxCount = 1;//最大选择数量，默认为1
     private boolean singleType;//是否只支持选单类型（图片或者视频）
     private ArrayList<String> imagePaths;//上一次选择的图片地址集合
+    private int spanCount = 4;
+    private OnImageCallBack onImageCallBack;
 
     private ImageLoader imageLoader;
 
@@ -124,6 +127,22 @@ public class ConfigManager {
 
     public void setSingleType(boolean singleType) {
         this.singleType = singleType;
+    }
+
+    public int getSpanCount() {
+        return spanCount;
+    }
+
+    public void setSpanCount(int spanCount) {
+        this.spanCount = spanCount;
+    }
+
+    public OnImageCallBack getOnImageCallBack() {
+        return onImageCallBack;
+    }
+
+    public void setOnImageCallBack(OnImageCallBack onImageCallBack) {
+        this.onImageCallBack = onImageCallBack;
     }
 
     public void setImageLoader(ImageLoader imageLoader) {

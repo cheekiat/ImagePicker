@@ -2,6 +2,7 @@
 <com.lcw.library.imagepicker.view.SquareRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/srl_item"
     android:layout_width="match_parent"
+    android:foreground="?selectableItemBackground"
     android:layout_height="match_parent"
     android:padding="1dp">
 
@@ -12,14 +13,14 @@
         android:background="@mipmap/icon_image_default"
         android:scaleType="centerCrop" />
 
-    <ImageView
-        android:id="@+id/iv_item_check"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_alignParentRight="true"
-        android:padding="5dp"
-        android:scaleType="centerCrop"
-        android:src="@mipmap/icon_image_checked" />
+<!--    <ImageView-->
+<!--        android:id="@+id/iv_item_check"-->
+<!--        android:layout_width="30dp"-->
+<!--        android:layout_height="30dp"-->
+<!--        android:layout_alignParentRight="true"-->
+<!--        android:padding="5dp"-->
+<!--        android:scaleType="centerCrop"-->
+<!--        android:src="@mipmap/icon_image_checked" />-->
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -45,5 +46,13 @@
 
     </LinearLayout>
 
+    <FrameLayout
+        android:id="@+id/countLayout"
+        android:layout_width="wrap_content"
+        android:padding="8dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true">
 
+        <include layout="@layout/layout_selector_count" />
+    </FrameLayout>
 </com.lcw.library.imagepicker.view.SquareRelativeLayout>

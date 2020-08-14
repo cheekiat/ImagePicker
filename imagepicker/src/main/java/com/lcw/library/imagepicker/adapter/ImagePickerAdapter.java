@@ -8,6 +8,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -133,17 +134,21 @@ public class ImagePickerAdapter extends RecyclerView.Adapter<ImagePickerAdapter.
             });
 
             if (holder instanceof MediaHolder) {
-                ((MediaHolder) holder).mCount.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
+                try {
+                    ((MediaHolder) holder).mCountLayout.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
 //                        if (hashMap.get(mediaFile.getDateToken()) != null) {
 //                            hashMap.remove(mediaFile.getDateToken());
 //                        }else {
 //                            hashMap.put(mediaFile.getDateToken(),mediaFile.getDateToken());
 //                        }
-                        mOnItemClickListener.onMediaCheck(view, position);
-                    }
-                });
+                            mOnItemClickListener.onMediaCheck(view, position);
+                        }
+                    });
+                }catch (Exception e){
+
+                }
             }
         }
     }
@@ -189,6 +194,8 @@ public class ImagePickerAdapter extends RecyclerView.Adapter<ImagePickerAdapter.
                 //如果是视频，需要显示视频时长
                 String duration = Utils.getVideoDuration(mediaFile.getDuration());
                 ((VideoHolder) mediaHolder).mVideoDuration.setText(duration);
+
+                ((VideoHolder) mediaHolder).mCount.setText(SelectionManager.getInstance().getSelectCountIndex(mediaFile.getPath())+"");
             }
         }
 
@@ -227,11 +234,13 @@ public class ImagePickerAdapter extends RecyclerView.Adapter<ImagePickerAdapter.
 
         SquareImageView mImageView;
         TextView mCount;
+        FrameLayout mCountLayout;
 
         MediaHolder(View itemView) {
             super(itemView);
             mImageView = itemView.findViewById(R.id.iv_item_image);
             mCount = itemView.findViewById(R.id.count);
+            mCountLayout = itemView.findViewById(R.id.countLayout);
         }
     }
 

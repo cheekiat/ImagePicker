@@ -36,6 +36,7 @@ import com.lcw.library.imagepicker.data.MediaFile;
 import com.lcw.library.imagepicker.data.MediaFolder;
 import com.lcw.library.imagepicker.executors.CommonExecutor;
 import com.lcw.library.imagepicker.listener.MediaLoadCallback;
+import com.lcw.library.imagepicker.listener.OnImageCallBack;
 import com.lcw.library.imagepicker.manager.ConfigManager;
 import com.lcw.library.imagepicker.manager.SelectionManager;
 import com.lcw.library.imagepicker.provider.ImagePickerProvider;
@@ -71,6 +72,8 @@ public class ImagePickerActivity extends BaseActivity implements ImagePickerAdap
     private boolean isSingleType;
     private int mMaxCount;
     private List<String> mImagePaths;
+    private int mSpanCount;
+    private OnImageCallBack onImageCallBack;
 
     /**
      * 界面UI
@@ -142,6 +145,8 @@ public class ImagePickerActivity extends BaseActivity implements ImagePickerAdap
         isShowVideo = ConfigManager.getInstance().isShowVideo();
         isSingleType = ConfigManager.getInstance().isSingleType();
         mMaxCount = ConfigManager.getInstance().getMaxCount();
+        mSpanCount = ConfigManager.getInstance().getSpanCount();
+        onImageCallBack = ConfigManager.getInstance().getOnImageCallBack();
         SelectionManager.getInstance().setMaxCount(mMaxCount);
 
         //载入历史选择记录
@@ -175,7 +180,7 @@ public class ImagePickerActivity extends BaseActivity implements ImagePickerAdap
 
         //列表相关
         mRecyclerView = findViewById(R.id.rv_main_images);
-        mGridLayoutManager = new GridLayoutManager(this, 4);
+        mGridLayoutManager = new GridLayoutManager(this, mSpanCount);
         mRecyclerView.setLayoutManager(mGridLayoutManager);
         //注释说当知道Adapter内Item的改变不会影响RecyclerView宽高的时候，可以设置为true让RecyclerView避免重新计算大小。
         mRecyclerView.setHasFixedSize(true);
@@ -603,6 +608,9 @@ public class ImagePickerActivity extends BaseActivity implements ImagePickerAdap
                 SelectionManager.getInstance().addImageToSelectList(mFilePath);
 
                 ArrayList<String> list = new ArrayList<>(SelectionManager.getInstance().getSelectPaths());
+                if(onImageCallBack!=null){
+                    onImageCallBack.onCallBack(list, list.size());
+                }
                 Intent intent = new Intent();
                 intent.putStringArrayListExtra(ImagePicker.EXTRA_SELECT_IMAGES, list);
                 setResult(RESULT_OK, intent);
@@ -621,6 +629,9 @@ public class ImagePickerActivity extends BaseActivity implements ImagePickerAdap
      */
     private void commitSelection() {
         ArrayList<String> list = new ArrayList<>(SelectionManager.getInstance().getSelectPaths());
+        if(onImageCallBack!=null){
+            onImageCallBack.onCallBack(list, list.size());
+        }
         Intent intent = new Intent();
         intent.putStringArrayListExtra(ImagePicker.EXTRA_SELECT_IMAGES, list);
         setResult(RESULT_OK, intent);
