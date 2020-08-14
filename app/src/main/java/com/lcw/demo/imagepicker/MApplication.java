@@ -2,6 +2,8 @@ package com.lcw.demo.imagepicker;
 
 import android.app.Application;
 
+import com.facebook.drawee.backends.pipeline.Fresco;
+
 /**
  * Create by: chenWei.li
  * Date: 2019/1/24
@@ -16,6 +18,7 @@ public class MApplication extends Application {
     public void onCreate() {
         super.onCreate();
         mApplication = this;
+        Fresco.initialize(this);
     }
 
     public static MApplication getContext() {

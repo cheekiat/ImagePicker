@@ -5,6 +5,7 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DecodeFormat;
 import com.bumptech.glide.request.RequestOptions;
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.lcw.library.imagepicker.utils.ImageLoader;
 
 /**
@@ -29,7 +30,10 @@ public class GlideLoader implements ImageLoader {
     @Override
     public void loadImage(ImageView imageView, String imagePath) {
         //小图加载
-        Glide.with(imageView.getContext()).load(imagePath).apply(mOptions).into(imageView);
+//        Glide.with(imageView.getContext()).load(imagePath).apply(mOptions).into(imageView);
+
+        ((SimpleDraweeView)imageView).setImageURI("file://"+imagePath);
+
     }
 
     @Override
