@@ -1,6 +1,4 @@
 <resources>
-    <string name="app_name">ImagePicker</string>
-
     <string name="image_picker">Image Picker</string>
     <string name="scanner_image">Scan image...</string>
     <string name="select_image_max">Select maximum %1$d picture</string>

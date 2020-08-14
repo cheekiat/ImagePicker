@@ -207,7 +207,7 @@ public class ImagePickerActivity extends BaseActivity implements ImagePickerAdap
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_gallery, menu);
+        inflater.inflate(R.menu.menu_image_picker_gallery, menu);
 
         menuItem = menu.findItem(R.id.apply);
 
